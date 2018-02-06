@@ -32,13 +32,13 @@
         })
 
         this.formationList = document.getElementById('content');
-        this.urlFormationList = "https://training.zenika.com/api/public/planned-sessions"
+        this.urlFormationList = "http://localhost:8080/api/public/planned-sessions"
       }
 
       getAllSessionsInAgency(agency) {
         return fetch(this.urlFormationList)
           .then(response => response.json())
-          .then(formJson => formJson.plannedSessions.filter(e => e.agencyName !== this.agency))
+          .then(formJson => formJson.plannedSessions.filter(e => e.agencyName === agency))
       }
 
       displayAllFuturSessions(agency) {
@@ -46,7 +46,8 @@
           .then(sessions => {
             sessions.forEach(e => {
               const formation = document.createElement("li")
-              formation.innerHTML = "Formation " + e.trainingTitle + ", " + e.trainingSubTitle + " | " + e.startDate
+              formation.innerHTML = "Formation " + e.trainingTitle + ", " + e.trainingSubTitle + " | " + 
+                  e.startDate + " at " + e.agencyName
               this.formationList.appendChild(formation)
             })
           })
