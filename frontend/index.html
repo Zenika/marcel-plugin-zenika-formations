@@ -32,50 +32,41 @@
         })
 
         this.formationList = document.getElementById('content');
-        this.urlFormationList = "http://localhost:8080/api/public/trainings"
-        this.urlFormationDetail = "https://training.zenika.com/api/public/trainings/<ID>/planned-sessions"
+        this.urlFormationList = "https://training.zenika.com/api/public/planned-sessions"
       }
 
       getAllSessionsInAgency(agency) {
-        fetch(this.urlFormationList)
+        return fetch(this.urlFormationList)
           .then(response => response.json())
-          .then(formJson => {
-            Promise.all(formJson.map(e => getDetailFormation(e.id)))
-          }).then(details => details.filter(e => e.agencyName === this.agency))
+          .then(formJson => formJson.plannedSessions.filter(e => e.agencyName !== this.agency))
       }
 
       displayAllFuturSessions(agency) {
-        getAllSessionsInAgency(agency)
+        this.getAllSessionsInAgency(agency)
           .then(sessions => {
             sessions.forEach(e => {
               const formation = document.createElement("li")
-              formation.innerHTML = e.title + " | " + e.startDate
+              formation.innerHTML = "Formation " + e.trainingTitle + ", " + e.trainingSubTitle + " | " + e.startDate
               this.formationList.appendChild(formation)
             })
           })
       }
 
-      getDetailFormation(id) {
-        const url = this.urlFormationDetail.replace("<ID>", id)
-        return fetch(url).then(response => response.json())
-      }
-
       propsDidChange(prevProps) {
         const { agency } = this.props
         if (agency !== prevProps.agency) {
-          displayAllFuturSessions(agency)
+          this.displayAllFuturSessions(agency)
         }
       }
 
       render() {
         const { agency } = this.props
-        displayAllFuturSessions(agency)
       }
     }
 
     const instance = new ZenikaFormations()
 
-    Marcel.Debug.changeProps({agence: "Nantes"})
+    Marcel.Debug.changeProps({agency: "Nantes"})
   </script>
 </body>
 
