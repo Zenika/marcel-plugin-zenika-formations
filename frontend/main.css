@@ -9,11 +9,14 @@ body {
 .container {
     display: -webkit-flex;
     display: flex;
+    width: 100vw;
+    height: 100vh;
 }
 
 .f-list {
     -webkit-flex: 1;
     flex: 1;
+    border-right: 1px solid black;
 }
 
 .f-detail {
@@ -21,14 +24,25 @@ body {
     flex: 1;
 }
 
+#list-title {
+    margin: 0;
+    padding: 0;
+    border-bottom: 1px solid rgb(220, 220, 220);
+    background: rgb(240, 240, 240);
+}
+
 ol {
     list-style-type: none;
     margin: 0;
     padding: 0;
-    background: rgb(240, 240, 240);
 }
 
 li {
     padding: 8px;
-    border: 1px solid rgb(220, 220, 220);
+    border-bottom: 1px solid rgb(220, 220, 220);
+    background: rgb(240, 240, 240);
+}
+
+.selected {
+    background: rgb(230, 230, 230);
 }
