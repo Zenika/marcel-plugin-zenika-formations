@@ -45,7 +45,7 @@ class ZenikaFormations extends Marcel.Plugin {
         }
         const endDate = new Date(session.startDate)
         endDate.setDate(endDate.getDate() + session.trainingDays)
-        date.innerHTML = session.startDate + " -> " + endDate.getFullYear() + "-" + endDate.getMonth() + "-" + endDate.getDay()
+        date.innerHTML = session.startDate + " - " + endDate.getFullYear() + "-" + endDate.getMonth() + "-" + endDate.getDay()
         summary.innerHTML = session.training.description
     }
 
@@ -108,5 +108,5 @@ const instance = new ZenikaFormations()
 Marcel.Debug.changeProps({
     agency: "Nantes",
     titleMessage: "Next formation in {agency}",
-    displayTime: 1
+    displayTime: 5
 })
