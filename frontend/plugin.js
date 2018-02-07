@@ -40,7 +40,9 @@ class ZenikaFormations extends Marcel.Plugin {
         const session = this.sessionList[this.selectedIndex]
         title.innerHTML = session.trainingTitle
         subtitle.innerHTML = session.trainingSubTitle
-        trainer.innerHTML = session.trainerFirstName + " " + session.trainerLastName
+        if(session.trainerFirstName !== null && session.trainerLastName !== null) {
+            trainer.innerHTML = session.trainerFirstName + " " + session.trainerLastName
+        }
         const endDate = new Date(session.startDate)
         endDate.setDate(endDate.getDate() + session.trainingDays)
         date.innerHTML = session.startDate + " -> " + endDate.getFullYear() + "-" + endDate.getMonth() + "-" + endDate.getDay()
