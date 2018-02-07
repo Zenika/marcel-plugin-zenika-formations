@@ -59,8 +59,7 @@ class ZenikaFormations extends Marcel.Plugin {
             if (i === this.selectedIndex) {
                 formation.classList.add("selected")
             }
-            formation.innerHTML = "Formation " + e.trainingTitle + ", " + e.trainingSubTitle + " | " +
-                e.startDate + " at " + e.agencyName
+            formation.innerHTML = e.startDate + ": " + e.trainingTitle
             this.formationList.appendChild(formation)
         })
     }
