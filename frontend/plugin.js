@@ -29,6 +29,24 @@ class ZenikaFormations extends Marcel.Plugin {
             })
     }
 
+    displaySessionDetail() {
+        const [title, subtitle, trainer, date, summary] = [
+            document.getElementById("title"),
+            document.getElementById("subtitle"),
+            document.getElementById("trainer"),
+            document.getElementById("date"),
+            document.getElementById("summary")
+        ]
+        const session = this.sessionList[this.selectedIndex]
+        title.innerHTML = session.trainingTitle
+        subtitle.innerHTML = session.trainingSubTitle
+        trainer.innerHTML = session.trainerFirstName + " " + session.trainerLastName
+        const endDate = new Date(session.startDate)
+        endDate.setDate(endDate.getDate() + session.trainingDays)
+        date.innerHTML = session.startDate + " -> " + endDate.getFullYear() + "-" + endDate.getMonth() + "-" + endDate.getDay()
+        summary.innerHTML = session.training.description
+    }
+
     displayList() {
         while (this.formationList.firstChild) {
             this.formationList.removeChild(this.formationList.firstChild)
@@ -52,6 +70,7 @@ class ZenikaFormations extends Marcel.Plugin {
                 this.selectedIndex += 1
             }
             this.displayList()
+            this.displaySessionDetail()
         }
     }
 

@@ -6,22 +6,40 @@ body {
     height: 100vh;
 }
 
-.container {
-    display: -webkit-flex;
+.container-v {
     display: flex;
+    flex-direction: column;
     width: 100vw;
     height: 100vh;
 }
 
-.f-list {
-    -webkit-flex: 1;
-    flex: 1;
-    border-right: 1px solid black;
+.container-h {
+    display: flex;
+    flex-direction: row;
+    width: 100vw;
+    height: 100vh;
 }
 
-.f-detail {
-    -webkit-flex: 1;
+.container-i-v {
+    display: inline-flex;
+    flex-direction: column;
+    width: 100vw;
+    height: 100vh;
+}
+
+.container-i-h {
+    display: inline-flex;
+    flex-direction: row;
+    width: 100vw;
+    height: 100vh;
+}
+
+.w1 {
     flex: 1;
+}
+
+.f-list {
+    border-right: 1px solid black;
 }
 
 #list-title {
