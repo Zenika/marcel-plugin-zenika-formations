@@ -26,6 +26,7 @@ class ZenikaFormations extends Marcel.Plugin {
             .then(sessions => {
                 this.sessionList = sessions
                 this.displayList()
+                this.displaySessionDetail()
             })
     }
 
