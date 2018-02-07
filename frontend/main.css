@@ -1,10 +1,19 @@
+@import url('https://fonts.googleapis.com/css?family=Roboto');
+
 body {
     margin: 0;
     padding: 0;
     overflow: hidden;
     width: 100vw;
     height: 100vh;
+    font-family: 'Roboto', sans-serif;
 }
+
+.primary-bg {}
+.secondary-bg {}
+.primary-col {}
+.secondary-col {}
+.selected {}
 
 .container-v {
     display: flex;
@@ -60,20 +69,13 @@ ol {
 
 li {
     padding: 8px;
-    border-bottom: 1px solid rgb(220, 220, 220);
-    background: rgb(60, 60, 60);
-    color: rgb(240, 240, 240);
-}
-
-.selected {
-    background: rgb(240, 240, 240);
-    color: rgb(60, 60, 60);
+    border-bottom: 1px solid #FFFFFF;
 }
 
 #title-block {
     margin: 0;
     padding: 0;
-    border-bottom: 1px solid rgb(240, 240, 240);
+    border-bottom: 1px solid #FFFFFF;
     background:  rgb(230, 40, 90);
     color: rgb(240, 240, 240);
     padding: 2%;
@@ -83,6 +85,7 @@ li {
 #subtitle {
     background: rgb(60, 60, 60);
     color: rgb(240, 240, 240);
+    border-bottom: 1px solid #FFFFFF;
     padding: 1%;
     padding: 2%;
 }
