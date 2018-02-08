@@ -3,8 +3,9 @@ class ZenikaFormations extends Marcel.Plugin {
         super({
             defaultProps: {
                 agency: "",
-                titleMessage: "Next formation in {agency}",
-                displayTime: 1
+                titleMessage: "Next formations in {agency}",
+                displayTime: 1,
+                locale: "fr"
             },
         })
 
@@ -31,37 +32,49 @@ class ZenikaFormations extends Marcel.Plugin {
     }
 
     displaySessionDetail() {
-        const [title, subtitle, trainer, date, summary] = [
+        const [title, subtitle, trainer, date, duration, summary] = [
             document.getElementById("title"),
             document.getElementById("subtitle"),
             document.getElementById("trainer"),
             document.getElementById("date"),
+            document.getElementById("duration"),
             document.getElementById("summary")
         ]
         const session = this.sessionList[this.selectedIndex]
-        title.innerHTML = session.trainingTitle
-        subtitle.innerHTML = session.trainingSubTitle
-        if(session.trainerFirstName !== null && session.trainerLastName !== null) {
-            trainer.innerHTML = session.trainerFirstName + " " + session.trainerLastName
+        title.innerText = session.trainingTitle
+        subtitle.innerText = session.trainingSubTitle
+        if(session.trainerFirstName && session.trainerLastName) {
+            trainer.innerText = "Par " + session.trainerFirstName + " " + session.trainerLastName + " "
         }
-        const endDate = new Date(session.startDate)
-        endDate.setDate(endDate.getDate() + session.trainingDays)
-        date.innerHTML = session.startDate + " - " + endDate.getFullYear() + "-" + endDate.getMonth() + "-" + endDate.getDay()
+        const endDate = moment(session.startDate, "YYYY-MM-DD").format("LL")
+        date.innerText = "le " + endDate + ". "
+
+        duration.innerText = "Dure: " + session.trainingDays + (session.trainingDays > 1 ? " jours." : "jour.")
+        
+        // TODO: Remove the HTML in the description and use innerText
         summary.innerHTML = session.training.description
     }
 
     displayList() {
-        while (this.formationList.firstChild) {
-            this.formationList.removeChild(this.formationList.firstChild)
-        }
-        this.sessionList.forEach((e, i) => {
-            const formation = document.createElement("li")
-            if (i === this.selectedIndex) {
-                formation.classList.add("selected")
+        this.formationList.innerHTML = ""
+        this.sessionList.forEach((formation, index) => {
+            const item = document.createElement("div")
+            item.classList.add("flex-container")
+            item.classList.add("list-item")
+            if (index === 0) {
+                item.classList.add("top", "selected")
             }
-            formation.innerHTML = "Formation " + e.trainingTitle + ", " + e.trainingSubTitle + " | " +
-                e.startDate + " at " + e.agencyName
-            this.formationList.appendChild(formation)
+
+            const name = document.createElement("div")
+            name.classList.add("name-info")
+            const date = document.createElement("div")
+            const startDate = moment(formation.startDate, "YYYY-MM-DD").format("dddd DD MMMM")
+            name.innerText = formation.trainingTitle
+            date.classList.add("date-info")
+            date.innerText = startDate
+            item.appendChild(name)
+            item.appendChild(date)
+            this.formationList.appendChild(item)
         })
     }
 
@@ -72,19 +85,35 @@ class ZenikaFormations extends Marcel.Plugin {
             } else {
                 this.selectedIndex += 1
             }
-            this.displayList()
             this.displaySessionDetail()
+            this.updateSelectionColor()
         }
+    }
+
+    removeSelectionColor() {
+        const prevIndex = this.selectedIndex == 0 ? this.formationList.children.length-1 : this.selectedIndex-1
+        const prevItem = this.formationList.children[prevIndex]
+        prevItem.classList.remove("selected")
+    }
+
+    updateSelectionColor() {
+        this.removeSelectionColor()
+        const item = this.formationList.children[this.selectedIndex]
+        item.classList.add("selected")
     }
 
     propsDidChange(prevProps) {
         const {
             agency,
             titleMessage,
-            displayTime
+            displayTime,
+            locale
         } = this.props
         if (agency !== prevProps.agency) {
             this.displayAllFuturSessions(agency)
+        }
+        if (locale !== prevProps.locale) {
+            moment.locale(locale)
         }
     }
 
@@ -92,7 +121,8 @@ class ZenikaFormations extends Marcel.Plugin {
         const {
             agency,
             titleMessage,
-            displayTime
+            displayTime, 
+            stylevars
         } = this.props
         const listTitle = document.getElementById("list-title")
         listTitle.innerHTML = titleMessage.replace("{agency}", agency)
@@ -100,7 +130,8 @@ class ZenikaFormations extends Marcel.Plugin {
         if (this.intervalID !== null) {
             window.clearInterval(this.intervalID)
         }
-        this.intervalID = window.setInterval(_ => this.updateSelection(), displayTime * 1000)
+        
+        this.intervalID = window.setInterval(() => this.updateSelection(), displayTime * 1000)
     }
 }
 
@@ -109,5 +140,12 @@ const instance = new ZenikaFormations()
 Marcel.Debug.changeProps({
     agency: "Nantes",
     titleMessage: "Next formation in {agency}",
-    displayTime: 5
+    displayTime: 5,
+    locale: "fr",
+    stylevars: {
+        "background-color": "#FFFFFF",
+        "primary-color": "rgb(202, 40, 40)", 
+        "secondary-color": "rgb(240, 240, 240)", 
+        "font-family": "Roboto"
+    }
 })
