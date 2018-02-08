@@ -9,21 +9,25 @@
 <body>
   <div class="container-h">
     <div class="f-list w1">
-      <div id="list-title" class="primary-bg"></div>
-      <ol id="content" class="secondary-bg">
+      <div id="list-title" class="title-block"></div>
+      <div id="content" class="list-container">
 
-      </ol>
+      </div>
     </div>
 
     <div class="f-detail w1">
-      <div id="title-block" class="primary-bg">Formation <span id="title"></span></div>
-      <div id="subtitle" class="secondary-bg"></div>
-      <div id="trainer"></div>
-      <div id="date"></div>
+      <div id="title-block" class="title-block">Formation <span id="title"></span></div>
+      <div id="subtitle"></div>
+      <span id="description">
+        <span id="trainer"></span>
+        <span id="date"></span>
+        <span id="duration"></span>
+      </span>
       <div id="summary"></div>
     </div>
   </div>
 
+  <script src="./moment-with-locales.js"></script>
   <script src="./tinycolor.js"></script>
   <script src="./marcel.js"></script>
   <script src="./plugin.js"></script>
