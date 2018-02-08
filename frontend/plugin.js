@@ -66,11 +66,11 @@ class ZenikaFormations extends Marcel.Plugin {
             }
 
             const name = document.createElement("div")
+            name.classList.add("name-info")
             const date = document.createElement("div")
             const startDate = moment(formation.startDate, "YYYY-MM-DD").format("dddd DD MMMM")
             name.innerText = formation.trainingTitle
             date.classList.add("date-info")
-            date.classList.add("text-right")
             date.innerText = startDate
             item.appendChild(name)
             item.appendChild(date)
@@ -90,13 +90,16 @@ class ZenikaFormations extends Marcel.Plugin {
         }
     }
 
-    updateSelectionColor() {
+    removeSelectionColor() {
         const prevIndex = this.selectedIndex == 0 ? this.formationList.children.length-1 : this.selectedIndex-1
-        this.formationList.children[prevIndex].classList.remove("selected")
+        const prevItem = this.formationList.children[prevIndex]
+        prevItem.classList.remove("selected")
+    }
+
+    updateSelectionColor() {
+        this.removeSelectionColor()
         const item = this.formationList.children[this.selectedIndex]
         item.classList.add("selected")
-        if (tinycolor(item.style.getPropertyValue("--highlight-color")).isDark()) 
-            item.classList.add("dark")
     }
 
     propsDidChange(prevProps) {

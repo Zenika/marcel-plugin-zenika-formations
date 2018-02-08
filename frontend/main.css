@@ -121,6 +121,7 @@ body {
 }
 
 #subtitle {
+    margin-top: 0.5%;
     color: var(--primary-text-color);
     font-size: var(--fs-big);
 }
@@ -131,5 +132,6 @@ body {
 }
 
 #summary {
+    margin: 0.5%;
     color: var(--primary-text-color);
 }
