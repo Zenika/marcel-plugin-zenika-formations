@@ -29,7 +29,7 @@ body {
 
 .selected {
     background: var(--highlight-color);
-    transition: background-color 2s;
+    transition: background-color 0.5s;
 }
 
 .primary-bg {
@@ -41,6 +41,7 @@ body {
 }
 
 .name-info {
+    flex: 1;
     color: var(--primary-text-color);
 }
 
@@ -49,6 +50,7 @@ body {
 }
 
 .date-info {
+    flex: 1;
     color: var(--secondary-text-color);
     font-size: var(--fs-small);
     text-align: right;

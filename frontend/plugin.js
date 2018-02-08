@@ -61,18 +61,12 @@ class ZenikaFormations extends Marcel.Plugin {
             const item = document.createElement("div")
             item.classList.add("flex-container")
             item.classList.add("list-item")
-            if (index === this.selectedIndex) {
-                item.classList.add("selected")
-            }
             if (index === 0) {
-                item.classList.add("top")
+                item.classList.add("top", "selected")
             }
 
             const name = document.createElement("div")
-            name.style.flex = 1
             const date = document.createElement("div")
-            date.style.flex = 1
-
             const startDate = moment(formation.startDate, "YYYY-MM-DD").format("dddd DD MMMM")
             name.innerText = formation.trainingTitle
             date.classList.add("date-info")
@@ -91,66 +85,18 @@ class ZenikaFormations extends Marcel.Plugin {
             } else {
                 this.selectedIndex += 1
             }
-            this.displayList()
             this.displaySessionDetail()
             this.updateSelectionColor()
         }
     }
 
-    changeBGColor(className, color) {
-        const el = document.getElementsByClassName(className)
-        let fc = "#191919"
-        if (tinycolor(color).isDark()) {
-            fc = "#f9f9f9"
-        }
-        
-        for(let i=0; i<el.length; i++) {
-            el[i].style.backgroundColor = color
-            el[i].style.color = fc
-        }
-    }
-
-    changeFontColor(className, color) {
-        const el = document.getElementsByClassName(className)
-        for(let i=0; i<el.length; i++) {
-            el[i].style.color = color
-        }
-    }
-
     updateSelectionColor() {
-        /*
-        const el = document.getElementsByClassName("selected")
-        const sc = tinycolor(this.props.stylevars["secondary-color"])
-        let comp = ""
-        if(sc.isDark()) {
-            comp = sc.lighten(65).toHexString()
-        } else {
-            comp = sc.darken(65).toHexString()
-        }
-        
-        for(let i=0; i<el.length; i++) {
-            el[i].style.backgroundColor = comp
-            el[i].style.color = this.props.stylevars["secondary-color"]
-        }
-        */
-    }
-
-    applyStyle(stylevars) {
-        const {
-            "background-color": backgroundColor
-        } = stylevars
-
-        const bg = stylevars["background-color"]
-        const pc = stylevars["primary-color"]
-        const sc = stylevars["secondary-color"]
-        const ff = stylevars["font-family"]
-        const body = document.getElementsByTagName("body")[0]
-        body.style.fontFamily = ff
-        body.style.backgroundColor = bg
-        this.changeBGColor("primary-bg", pc)
-        this.changeBGColor("secondary-bg", sc)
-        this.changeFontColor("primary-col", pc)
-        this.changeFontColor("secondary-col", sc)
+        const prevIndex = this.selectedIndex == 0 ? this.formationList.children.length-1 : this.selectedIndex-1
+        this.formationList.children[prevIndex].classList.remove("selected")
+        const item = this.formationList.children[this.selectedIndex]
+        item.classList.add("selected")
+        if (tinycolor(item.style.getPropertyValue("--highlight-color")).isDark()) 
+            item.classList.add("dark")
     }
 
     propsDidChange(prevProps) {
@@ -178,11 +124,10 @@ class ZenikaFormations extends Marcel.Plugin {
         const listTitle = document.getElementById("list-title")
         listTitle.innerHTML = titleMessage.replace("{agency}", agency)
 
-        this.applyStyle(stylevars)
-
         if (this.intervalID !== null) {
             window.clearInterval(this.intervalID)
         }
+        
         this.intervalID = window.setInterval(() => this.updateSelection(), displayTime * 1000)
     }
 }
