@@ -5,6 +5,7 @@ class ZenikaFormations extends Marcel.Plugin {
                 agency: "",
                 titleMessage: "Next formations in {agency}",
                 displayTime: 1,
+                dualpane: true,                
                 locale: "fr"
             },
         })
@@ -22,12 +23,13 @@ class ZenikaFormations extends Marcel.Plugin {
             .then(formJson => formJson.plannedSessions.filter(e => e.agencyName === agency))
     }
 
-    displayAllFuturSessions(agency) {
+    displayAllFuturSessions(agency, dualpane) {
         this.getAllSessionsInAgency(agency)
             .then(sessions => {
                 this.sessionList = sessions
                 this.displayList()
-                this.displaySessionDetail()
+                if (dualpane)
+                    this.displaySessionDetail()
             })
     }
 
@@ -107,10 +109,13 @@ class ZenikaFormations extends Marcel.Plugin {
             agency,
             titleMessage,
             displayTime,
-            locale
+            locale,
+            dualpane,
+            stylevars
         } = this.props
+
         if (agency !== prevProps.agency) {
-            this.displayAllFuturSessions(agency)
+            this.displayAllFuturSessions(agency, dualpane)
         }
         if (locale !== prevProps.locale) {
             moment.locale(locale)
@@ -121,7 +126,9 @@ class ZenikaFormations extends Marcel.Plugin {
         const {
             agency,
             titleMessage,
-            displayTime, 
+            displayTime,
+            locale,
+            dualpane,
             stylevars
         } = this.props
         const listTitle = document.getElementById("list-title")
@@ -130,8 +137,12 @@ class ZenikaFormations extends Marcel.Plugin {
         if (this.intervalID !== null) {
             window.clearInterval(this.intervalID)
         }
-        
-        this.intervalID = window.setInterval(() => this.updateSelection(), displayTime * 1000)
+        if (dualpane) {
+            document.getElementById("right-pane").style.display = "block"
+            this.intervalID = window.setInterval(() => this.updateSelection(), displayTime * 1000)
+        } else {
+            document.getElementById("right-pane").style.display = "none"
+        }
     }
 }
 
@@ -142,6 +153,7 @@ Marcel.Debug.changeProps({
     titleMessage: "Next formation in {agency}",
     displayTime: 5,
     locale: "fr",
+    dualpane: true,
     stylevars: {
         "background-color": "#FFFFFF",
         "primary-color": "rgb(202, 40, 40)", 
