@@ -1,3 +1,21 @@
+/* Use to debug the plugin:
+Marcel.Debug.changeProps({
+    agency: "Nantes",
+    titleMessage: "Next formation in {agency}",
+    displayTime: 5,
+    locale: "fr",
+    dualpane: true,
+    headerColor: "rgba(222, 33, 33, 0.85)",
+    selectedColor: "rgba(222, 33, 33, 0.85)",
+    stylevars: {
+        "background-color": "#FFFFFF",
+        "primary-color": "rgba(248, 211, 211, 1)", 
+        "secondary-color": "rgba(237, 18, 18, 0.5)", 
+        "font-family": "Roboto"
+    }
+})
+*/
+
 class ZenikaFormations extends Marcel.Plugin {
     constructor() {
         super({
@@ -13,6 +31,7 @@ class ZenikaFormations extends Marcel.Plugin {
         this.formationList = document.getElementById("content")
         this.sessionList = []
         this.selectedIndex = 0
+        this.hasPrev = false
         this.urlFormationList = "http://localhost:8080/api/public/planned-sessions"
         this.intervalID = null
         
@@ -32,8 +51,10 @@ class ZenikaFormations extends Marcel.Plugin {
             .then(sessions => {
                 this.sessionList = sessions
                 this.displayList()
-                if (dualpane)
+                if (dualpane) {
                     this.displaySessionDetail()
+                    this.updateSelection()
+                }
             })
     }
     
@@ -69,9 +90,6 @@ class ZenikaFormations extends Marcel.Plugin {
             const item = document.createElement("div")
             item.classList.add("flex-container")
             item.classList.add("list-item")
-            if (index === 0) {
-                item.classList.add("top", "selected")
-            }
             
             const name = document.createElement("div")
             name.classList.add("name-info")
@@ -88,13 +106,14 @@ class ZenikaFormations extends Marcel.Plugin {
     
     updateSelection() {
         if (this.sessionList !== undefined && this.sessionList.length !== 0) {
+            this.displaySessionDetail()
+            this.updateSelectionColor()
+            this.hasPrev = true
             if (this.selectedIndex === this.sessionList.length - 1) {
                 this.selectedIndex = 0
             } else {
                 this.selectedIndex += 1
             }
-            this.displaySessionDetail()
-            this.updateSelectionColor()
         }
     }
     
@@ -114,7 +133,8 @@ class ZenikaFormations extends Marcel.Plugin {
     }
     
     updateSelectionColor() {
-        this.removeSelectionColor()
+        if (this.hasPrev)
+            this.removeSelectionColor()
         const item = this.formationList.children[this.selectedIndex]
         item.classList.add("selected")
         if (this.selectedIsDark) {
@@ -206,19 +226,3 @@ class ZenikaFormations extends Marcel.Plugin {
 }
 
 const instance = new ZenikaFormations()
-
-Marcel.Debug.changeProps({
-    agency: "Nantes",
-    titleMessage: "Next formation in {agency}",
-    displayTime: 5,
-    locale: "fr",
-    dualpane: true,
-    headerColor: "rgba(222, 33, 33, 0.85)",
-    selectedColor: "rgba(222, 33, 33, 0.85)",
-    stylevars: {
-        "background-color": "#FFFFFF",
-        "primary-color": "rgba(248, 211, 211, 1)", 
-        "secondary-color": "rgba(237, 18, 18, 0.5)", 
-        "font-family": "Roboto"
-    }
-})
