@@ -90,6 +90,9 @@ class ZenikaFormations extends Marcel.Plugin {
             const item = document.createElement("div")
             item.classList.add("flex-container")
             item.classList.add("list-item")
+            if(index === 0) {
+                item.classList.add("top")
+            }
             
             const name = document.createElement("div")
             name.classList.add("name-info")
