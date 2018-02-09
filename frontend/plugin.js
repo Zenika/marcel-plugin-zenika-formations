@@ -9,20 +9,24 @@ class ZenikaFormations extends Marcel.Plugin {
                 locale: "fr"
             },
         })
-
+        
         this.formationList = document.getElementById("content")
         this.sessionList = []
         this.selectedIndex = 0
         this.urlFormationList = "http://localhost:8080/api/public/planned-sessions"
         this.intervalID = null
+        
+        this.bgIsDark = false
+        this.selectedIsDark = false
+        this.headerIsDark = false
     }
-
+    
     getAllSessionsInAgency(agency) {
         return fetch(this.urlFormationList)
             .then(response => response.json())
             .then(formJson => formJson.plannedSessions.filter(e => e.agencyName === agency))
     }
-
+    
     displayAllFuturSessions(agency, dualpane) {
         this.getAllSessionsInAgency(agency)
             .then(sessions => {
@@ -32,7 +36,7 @@ class ZenikaFormations extends Marcel.Plugin {
                     this.displaySessionDetail()
             })
     }
-
+    
     displaySessionDetail() {
         const [title, subtitle, trainer, date, duration, summary] = [
             document.getElementById("title"),
@@ -50,13 +54,15 @@ class ZenikaFormations extends Marcel.Plugin {
         }
         const endDate = moment(session.startDate, "YYYY-MM-DD").format("LL")
         date.innerText = "le " + endDate + ". "
-
+        
         duration.innerText = "Dure: " + session.trainingDays + (session.trainingDays > 1 ? " jours." : "jour.")
         
         // TODO: Remove the HTML in the description and use innerText
-        summary.innerHTML = session.training.description
+        const desc = document.createElement("div")
+        desc.innerHTML = session.training.description
+        summary.innerHTML = desc.innerText
     }
-
+    
     displayList() {
         this.formationList.innerHTML = ""
         this.sessionList.forEach((formation, index) => {
@@ -66,7 +72,7 @@ class ZenikaFormations extends Marcel.Plugin {
             if (index === 0) {
                 item.classList.add("top", "selected")
             }
-
+            
             const name = document.createElement("div")
             name.classList.add("name-info")
             const date = document.createElement("div")
@@ -79,7 +85,7 @@ class ZenikaFormations extends Marcel.Plugin {
             this.formationList.appendChild(item)
         })
     }
-
+    
     updateSelection() {
         if (this.sessionList !== undefined && this.sessionList.length !== 0) {
             if (this.selectedIndex === this.sessionList.length - 1) {
@@ -91,19 +97,37 @@ class ZenikaFormations extends Marcel.Plugin {
             this.updateSelectionColor()
         }
     }
-
+    
     removeSelectionColor() {
         const prevIndex = this.selectedIndex == 0 ? this.formationList.children.length-1 : this.selectedIndex-1
         const prevItem = this.formationList.children[prevIndex]
         prevItem.classList.remove("selected")
+        if (this.bgIsDark) {
+            for(let i=0; i<prevItem.children.length; ++i) {
+                prevItem.children[i].classList.add("dark")
+            }
+        } else {
+            for(let i=0; i<prevItem.children.length; ++i) {
+                prevItem.children[i].classList.remove("dark")
+            }
+        }
     }
-
+    
     updateSelectionColor() {
         this.removeSelectionColor()
         const item = this.formationList.children[this.selectedIndex]
         item.classList.add("selected")
+        if (this.selectedIsDark) {
+            for(let i=0; i<item.children.length; ++i) {
+                item.children[i].classList.add("dark")
+            }
+        } else {
+            for(let i=0; i<item.children.length; ++i) {
+                item.children[i].classList.remove("dark")
+            }
+        }
     }
-
+    
     propsDidChange(prevProps) {
         const {
             agency,
@@ -111,17 +135,34 @@ class ZenikaFormations extends Marcel.Plugin {
             displayTime,
             locale,
             dualpane,
+            selectedColor,
+            headerColor,
             stylevars
         } = this.props
-
+        
         if (agency !== prevProps.agency) {
             this.displayAllFuturSessions(agency, dualpane)
         }
         if (locale !== prevProps.locale) {
             moment.locale(locale)
         }
+        
+        this.bgIsDark = tinycolor(stylevars["background-color"]).isDark()
+        this.selectedIsDark = tinycolor(selectedColor).isDark()
+        this.headerIsDark = tinycolor(headerColor).isDark()
+        if(this.headerIsDark) {
+            const headers = document.getElementsByClassName("title-block")
+            for (const h of headers) {
+                h.classList.add("dark")
+            }
+        } else {
+            const headers = document.getElementsByClassName("title-block")
+            for (const h of headers) {
+                h.classList.remove("dark")
+            }
+        }
     }
-
+    
     render() {
         const {
             agency,
@@ -129,11 +170,13 @@ class ZenikaFormations extends Marcel.Plugin {
             displayTime,
             locale,
             dualpane,
+            selectedColor,
+            headerColor,
             stylevars
         } = this.props
         const listTitle = document.getElementById("list-title")
         listTitle.innerHTML = titleMessage.replace("{agency}", agency)
-
+        
         if (this.intervalID !== null) {
             window.clearInterval(this.intervalID)
         }

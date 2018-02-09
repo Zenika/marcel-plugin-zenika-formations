@@ -3,8 +3,8 @@
 :root {
     --primary-text-color: #191919;
     --primary-text-color-dark: #f9f9f9;
-    --secondary-text-color: #36363670;
-    --secondary-text-color-dark: #d6d6d6;
+    --secondary-text-color: #36363680;
+    --secondary-text-color-dark: #d6d6d680;
 
     --highlight-color: #e62828;
     --header-color: #e62828;
@@ -27,9 +27,27 @@ body {
     font-family: 'Roboto', sans-serif;
 }
 
+.title-block {
+    margin: 0;
+    padding: 0;
+    background:  var(--header-color);
+    color: var(--primary-text-color);
+    padding: 2%;
+    font-size: var(--fs-bigger);
+}
+
+.title-block.dark {
+    margin: 0;
+    padding: 0;
+    background:  var(--header-color);
+    color: var(--primary-text-color-dark);
+    padding: 2%;
+    font-size: var(--fs-bigger);
+}
+
 .selected {
     background: var(--highlight-color);
-    transition: background-color 0.5s;
+    transition: background-color 1s;
 }
 
 .primary-bg {
@@ -109,15 +127,6 @@ body {
 
 .w1 {
     flex: 1;
-}
-
-.title-block {
-    margin: 0;
-    padding: 0;
-    background:  var(--header-color);
-    color: var(--primary-text-color-dark);
-    padding: 2%;
-    font-size: var(--fs-bigger);
 }
 
 #subtitle {
