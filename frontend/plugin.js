@@ -161,6 +161,22 @@ class ZenikaFormations extends Marcel.Plugin {
                 h.classList.remove("dark")
             }
         }
+
+        const html = document.getElementsByTagName("html")[0]
+        html.style.setProperty("--header-color", headerColor)
+        html.style.setProperty("--highlight-color", selectedColor)
+
+        const primaryColor = tinycolor(stylevars["primary-color"])
+        html.style.setProperty("--primary-text-color", 
+            primaryColor.isDark() ? primaryColor.toHexString() : primaryColor.darken(60).toHexString())
+        html.style.setProperty("--primary-text-color-dark", 
+            primaryColor.isLight() ? primaryColor.toHexString() : primaryColor.lighten(60).toHexString())
+
+        const secondaryColor = tinycolor(stylevars["secondary-color"])
+        html.style.setProperty("--secondary-text-color", 
+            secondaryColor.isDark() ? secondaryColor.toHexString() : secondaryColor.darken(60).toHexString())
+        html.style.setProperty("--secondary-text-color-dark", 
+            secondaryColor.isLight() ? secondaryColor.toHexString() : secondaryColor.lighten(60).toHexString())
     }
     
     render() {
@@ -197,10 +213,12 @@ Marcel.Debug.changeProps({
     displayTime: 5,
     locale: "fr",
     dualpane: true,
+    headerColor: "rgba(222, 33, 33, 0.85)",
+    selectedColor: "rgba(222, 33, 33, 0.85)",
     stylevars: {
         "background-color": "#FFFFFF",
-        "primary-color": "rgb(202, 40, 40)", 
-        "secondary-color": "rgb(240, 240, 240)", 
+        "primary-color": "rgba(248, 211, 211, 1)", 
+        "secondary-color": "rgba(237, 18, 18, 0.5)", 
         "font-family": "Roboto"
     }
 })
