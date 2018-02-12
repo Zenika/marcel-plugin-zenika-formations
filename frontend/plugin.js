@@ -26,13 +26,14 @@ class ZenikaFormations extends Marcel.Plugin {
                 dualpane: true,                
                 locale: "fr"
             },
+            url
         })
         
         this.formationList = document.getElementById("content")
         this.sessionList = []
         this.selectedIndex = 0
         this.hasPrev = false
-        this.urlFormationList = "http://localhost:8080/api/public/planned-sessions"
+        this.urlFormationList = url
         this.intervalID = null
         
         this.bgIsDark = false
@@ -228,4 +229,4 @@ class ZenikaFormations extends Marcel.Plugin {
     }
 }
 
-const instance = new ZenikaFormations()
+const instance = new ZenikaFormations("http://localhost:8080/api/public/planned-sessions")
