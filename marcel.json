@@ -1,0 +1,51 @@
+{
+  "eltName": "marcel-plugin-zenika-formations",
+  "name": "Formation Zenika",
+  "description": "Display a list of the next Zenika formation.",
+  "frontend": {
+    "props": [
+      {
+        "name": "agency",
+        "type": "string",
+        "description": "Name of the Zenika agency.",
+        "value": "nantes"
+      },
+      {
+        "name": "titleMessage",
+        "type": "string",
+        "description": "Title message. If it contains {agency}, it will be replaced by the agency name.",
+        "value": "Next formations in {agency}"
+      },
+      {
+        "name": "displayTime",
+        "type": "float",
+        "description": "Number of seconds before switching selection.",
+        "value": "10.0"
+      },
+      {
+        "name": "locale",
+        "type": "string",
+        "description": "Langage to use for the date.",
+        "value": "en"
+      },
+      {
+        "name": "dualpane",
+        "type": "bool",
+        "description": "If the display should be single pane or dual pane.",
+        "value": "true"
+      },
+      {
+        "name": "selectedColor",
+        "type": "string",
+        "description": "The color that will be used to highlight the currently displayed formation.",
+        "value": "rgba(222, 33, 33, 0.85)"
+      },
+      {
+        "name": "headerColor",
+        "type": "string",
+        "description": "The color of the headers.",
+        "value": "rgba(222, 33, 33, 0.85)"
+      }
+    ]
+  }
+}
